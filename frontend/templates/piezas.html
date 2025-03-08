@@ -55,20 +55,32 @@
                 <div class="col">
                   <select class="form-control" name="filtro_marca">
                     <option value="">Filtrar por marca</option>
-                    <option value="Kawasaki">Kawasaki</option>
-                    <option value="Aprilia">Aprilia</option>
+                    <option value="Kawasaki" {% if request.query_params.get('filtro_marca') == 'Kawasaki' %} selected {% endif %}>Kawasaki</option>
+                    <option value="Aprilia" {% if request.query_params.get('filtro_marca') == 'Aprilia' %} selected {% endif %}>Aprilia</option>
+                    <option value="Yamaha" {% if request.query_params.get('filtro_marca') == 'Yamaha' %} selected {% endif %}>Yamaha</option>
+                    <option value="Honda" {% if request.query_params.get('filtro_marca') == 'Honda' %} selected {% endif %}>Honda</option>
+                    <option value="Suzuki" {% if request.query_params.get('filtro_marca') == 'Suzuki' %} selected {% endif %}>Suzuki</option>
+                    <option value="Ducati" {% if request.query_params.get('filtro_marca') == 'Ducati' %} selected {% endif %}>Ducati</option>
+                    <option value="Triumph" {% if request.query_params.get('filtro_marca') == 'Triumph' %} selected {% endif %}>Triumph</option>
                   </select>
                 </div>
                 <div class="col">
                   <select class="form-control" name="filtro_categoria">
                     <option value="">Filtrar por categoría</option>
-                    <option value="guardabarros">Guardabarros</option>
-                    <option value="quillas">Quillas</option>
-                    <option value="depositos">Depósitos</option>
-                    <option value="escopas">Escopas</option>
-                    <option value="frontal">Frontal</option>
-                    <option value="laterales">Laterales</option>
-                    <option value="colin">Colín</option>
+                    <option value="guardabarros" {% if request.query_params.get('filtro_categoria') == 'guardabarros' %} selected {% endif %}>Guardabarros</option>
+                    <option value="quillas" {% if request.query_params.get('filtro_categoria') == 'quillas' %} selected {% endif %}>Quillas</option>
+                    <option value="depositos" {% if request.query_params.get('filtro_categoria') == 'depositos' %} selected {% endif %}>Depósitos</option>
+                    <option value="escopas" {% if request.query_params.get('filtro_categoria') == 'escopas' %} selected {% endif %}>Escopas</option>
+                    <option value="frontal" {% if request.query_params.get('filtro_categoria') == 'frontal' %} selected {% endif %}>Frontal</option>
+                    <option value="laterales" {% if request.query_params.get('filtro_categoria') == 'laterales' %} selected {% endif %}>Laterales</option>
+                    <option value="colin" {% if request.query_params.get('filtro_categoria') == 'colin' %} selected {% endif %}>Colín</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <select class="form-control" name="filtro_cliente">
+                    <option value="">Filtrar por cliente</option>
+                    <option value="MotoFibra" {% if request.query_params.get('filtro_cliente') == 'MotoFibra' %} selected {% endif %}>MotoFibra</option>
+                    <option value="S2Concept" {% if request.query_params.get('filtro_cliente') == 'S2Concept' %} selected {% endif %}>S2Concept</option>
                   </select>
                 </div>
                 <div class="col-auto">
@@ -99,10 +111,9 @@
                       <td>{{ pieza.cliente }}</td>
                       <td>{{ pieza.categoria }}</td>
                       <td>
-    <a href="/piezas/{{ pieza.id }}" class="btn btn-info btn-sm">Ver Detalles</a>
-    <a href="/piezas/{{ pieza.id }}/editar" class="btn btn-warning btn-sm">Modificar</a>
-</td>
-
+                        <a href="/piezas/{{ pieza.id }}" class="btn btn-info btn-sm">Ver Detalles</a>
+                        <a href="/piezas/{{ pieza.id }}/editar" class="btn btn-warning btn-sm">Modificar</a>
+                      </td>
                     </tr>
                   {% endfor %}
                 {% else %}
