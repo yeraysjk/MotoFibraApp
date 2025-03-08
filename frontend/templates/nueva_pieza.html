@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Añadir Nueva Pieza - MotoFibra</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="/">MotoFibra</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/piezas">Piezas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow">
+          <div class="card-header bg-success text-white">
+            <h3 class="mb-0">Añadir Nueva Pieza</h3>
+          </div>
+          <div class="card-body">
+            <form action="/piezas_basicas" method="post">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre de la Pieza</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduce el nombre de la pieza" required>
+              </div>
+              <div class="mb-3">
+                <label for="marca" class="form-label">Marca</label>
+                <select class="form-select" id="marca" name="marca" required>
+                  <option value="" selected disabled>Seleccione una marca</option>
+                  <option value="Kawasaki">Kawasaki</option>
+                  <option value="Aprilia">Aprilia</option>
+                  <!-- Agrega más marcas según sea necesario -->
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="referencia" class="form-label">Referencia</label>
+                <input type="text" class="form-control" id="referencia" name="referencia" placeholder="Introduce la referencia" required>
+              </div>
+              <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                <select class="form-select" id="cliente" name="cliente" required>
+                  <option value="" selected disabled>Seleccione un cliente</option>
+                  <option value="MotoFibra">MotoFibra</option>
+                  <option value="S2Concept">S2Concept</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría de la Pieza</label>
+                <select class="form-select" id="categoria" name="categoria" required>
+                  <option value="" selected disabled>Seleccione una categoría</option>
+                  <option value="guardabarros">Guardabarros</option>
+                  <option value="quillas">Quillas</option>
+                  <option value="depositos">Depósitos</option>
+                  <option value="escopas">Escopas</option>
+                  <option value="frontal">Frontal</option>
+                  <option value="laterales">Laterales</option>
+                  <option value="colin">Colin</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Agregar Pieza Básica</button>
+            </form>
+            <hr>
+            <div class="text-center">
+              <p class="text-muted">Después de crear la pieza básica, podrás agregar detalles adicionales en otra sección.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-center text-white mt-5 p-4">
+    <p>© 2025 MotoFibra - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

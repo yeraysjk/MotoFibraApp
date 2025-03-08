@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Piezas - MotoFibra</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .list-group-item.active a {
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="/">MotoFibra</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="/piezas">Piezas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="container mt-5">
+    <h1 class="mb-4">Gestión de Piezas</h1>
+
+    <div class="row">
+      <!-- Columna izquierda: Lista de piezas y filtros -->
+      <div class="col-md-12">
+        <div class="card shadow mb-4">
+          <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Lista de Piezas</h5>
+          </div>
+          <div class="card-body">
+            <!-- Formulario de filtrado -->
+            <form method="get" action="/piezas">
+              <div class="row g-2 mb-3">
+                <div class="col">
+                  <input type="text" class="form-control" name="filtro_nombre" placeholder="Filtrar por nombre" value="{{ request.query_params.get('filtro_nombre', '') }}">
+                </div>
+                <div class="col">
+                  <select class="form-control" name="filtro_marca">
+                    <option value="">Filtrar por marca</option>
+                    <option value="Kawasaki">Kawasaki</option>
+                    <option value="Aprilia">Aprilia</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <select class="form-control" name="filtro_categoria">
+                    <option value="">Filtrar por categoría</option>
+                    <option value="guardabarros">Guardabarros</option>
+                    <option value="quillas">Quillas</option>
+                    <option value="depositos">Depósitos</option>
+                    <option value="escopas">Escopas</option>
+                    <option value="frontal">Frontal</option>
+                    <option value="laterales">Laterales</option>
+                    <option value="colin">Colín</option>
+                  </select>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Tabla de piezas -->
+            <table class="table table-bordered">
+              <thead class="table-dark">
+                <tr>
+                  <th>Nombre</th>
+                  <th>Marca</th>
+                  <th>Referencia</th>
+                  <th>Cliente</th>
+                  <th>Categoría</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if piezas %}
+                  {% for pieza in piezas %}
+                    <tr>
+                      <td>{{ pieza.nombre }}</td>
+                      <td>{{ pieza.marca }}</td>
+                      <td>{{ pieza.referencia }}</td>
+                      <td>{{ pieza.cliente }}</td>
+                      <td>{{ pieza.categoria }}</td>
+                      <td>
+    <a href="/piezas/{{ pieza.id }}" class="btn btn-info btn-sm">Ver Detalles</a>
+    <a href="/piezas/{{ pieza.id }}/editar" class="btn btn-warning btn-sm">Modificar</a>
+</td>
+
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="6" class="text-center text-danger fw-bold">No hay resultados</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón para añadir una nueva pieza -->
+    <div class="text-center mb-5">
+      <a href="/piezas/nueva" class="btn btn-success btn-lg">Añadir Nueva Pieza</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-center text-white p-4">
+    <p>© 2025 MotoFibra - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

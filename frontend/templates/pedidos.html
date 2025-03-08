@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Pedidos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">MotoFibra</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/piezas">Piezas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Formulario para agregar detalles del pedido -->
+    <div class="container mt-5">
+        <h2>Agregar Pedido</h2>
+        <form action="/pedidos" method="post">
+            <div class="mb-3">
+                <label for="pieza_id" class="form-label">Seleccionar Pieza</label>
+                <select class="form-control" id="pieza_id" name="pieza_id" required>
+                    <!-- Aquí deberás llenar las opciones con las piezas existentes en la base de datos -->
+                    <!-- Por ejemplo, en backend deberás pasar los datos de piezas desde el controlador -->
+                    <option value="1">Pieza 1</option>
+                    <option value="2">Pieza 2</option>
+                    <option value="3">Pieza 3</option>
+                    <!-- Se agregan dinámicamente con Python -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Pedido</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-primary text-center text-white mt-5 p-4 shadow">
+        <p>© 2025 MotoFibra - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
