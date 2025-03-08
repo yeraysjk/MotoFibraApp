@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Pieza</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- Agregado Chart.js -->
+  <style>
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .highlight {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ff6347; /* Un color llamativo */
+    }
+    .details-table td {
+      font-size: 1.1em;
+      vertical-align: middle;
+    }
+    .table th {
+      background-color: #f8f9fa;
+    }
+    .table td {
+      padding: 0.75rem;
+    }
+    .pie-chart-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Detalle de la Pieza</h1>
+
+    <div class="row">
+      <!-- Detalles de la pieza en una columna -->
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="card-title">Información de la Pieza</h3>
+            <table class="table details-table">
+              <tr>
+                <th>Nombre</th>
+                <td>{{ pieza.nombre }}</td>
+              </tr>
+              <tr>
+                <th>Marca</th>
+                <td>{{ pieza.marca }}</td>
+              </tr>
+              <tr>
+                <th>Referencia</th>
+                <td>{{ pieza.referencia }}</td>
+              </tr>
+              <tr>
+                <th>Cliente</th>
+                <td>{{ pieza.cliente }}</td>
+              </tr>
+              <tr>
+                <th>Categoría</th>
+                <td>{{ pieza.categoria }}</td>
+              </tr>
+            </table>
+
+            <!-- Mostrar detalles adicionales si existen -->
+            {% if detalles %}
+            <h3 class="mt-4">Detalles de la Pieza</h3>
+            <table class="table details-table">
+              <tr>
+                <th>Tiempo de Fabricación</th>
+                <td>{{ detalles.tiempo_fabricacion }} minutos</td>
+              </tr>
+              <tr>
+                <th>Tiempo de Pintado</th>
+                <td>{{ detalles.tiempo_pintado }} minutos</td>
+              </tr>
+              <tr>
+                <th>Tiempo de Lijado</th>
+                <td>{{ detalles.tiempo_lijado }} minutos</td>
+              </tr>
+              <tr>
+                <th>Tiempo de Masillado</th>
+                <td>{{ detalles.tiempo_masillado }} minutos</td>
+              </tr>
+              <tr>
+                <th class="highlight">Costo</th>
+                <td class="highlight">${{ detalles.costo }}</td>
+              </tr>
+              <tr>
+                <th>Gasto de Resina</th>
+                <td>{{ detalles.gasto_resina }} litros</td>
+              </tr>
+            </table>
+            {% else %}
+            <p>No se encontraron detalles adicionales para esta pieza.</p>
+            {% endif %}
+
+            <!-- Botones de acción -->
+            <div class="d-flex justify-content-between mt-4">
+              <a href="/piezas/{{ pieza.id }}/editar" class="btn btn-primary">Editar Pieza</a>
+              <a href="/piezas" class="btn btn-secondary">Regresar a la lista</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna para el gráfico -->
+      <div class="col-md-6">
+        {% if detalles %}
+        <div class="pie-chart-container">
+          <h3 class="text-center">Distribución de Tiempos</h3>
+          <canvas id="pieChart" width="300" height="300"></canvas> <!-- El gráfico se mantiene pequeño -->
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Obtener los tiempos de fabricación, pintado, lijado y masillado
+    const tiempoFabricacion = {{ detalles.tiempo_fabricacion }};
+    const tiempoPintado = {{ detalles.tiempo_pintado }};
+    const tiempoLijado = {{ detalles.tiempo_lijado }};
+    const tiempoMasillado = {{ detalles.tiempo_masillado }};
+
+    // Calcular el total de los tiempos
+    const totalTiempo = tiempoFabricacion + tiempoPintado + tiempoLijado + tiempoMasillado;
+
+    // Datos para el gráfico de torta (quesito)
+    const data = {
+      labels: ['Fabricación', 'Pintado', 'Lijado', 'Masillado'],
+      datasets: [{
+        label: 'Tiempo (%)',
+        data: [
+          (tiempoFabricacion / totalTiempo) * 100,
+          (tiempoPintado / totalTiempo) * 100,
+          (tiempoLijado / totalTiempo) * 100,
+          (tiempoMasillado / totalTiempo) * 100
+        ],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+        hoverOffset: 4
+      }]
+    };
+
+    // Opciones del gráfico
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              return tooltipItem.raw.toFixed(2) + '%'; // Mostrar porcentaje con 2 decimales
+            }
+          }
+        }
+      }
+    };
+
+    // Crear el gráfico de torta
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie', // Tipo de gráfico
+      data: data,
+      options: options
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

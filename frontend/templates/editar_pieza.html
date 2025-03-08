@@ -23,6 +23,33 @@
         <label for="referencia" class="form-label">Referencia</label>
         <input type="text" class="form-control" id="referencia" name="referencia" value="{{ pieza.referencia }}" required>
       </div>
+
+      <!-- Nuevos campos para los detalles de la pieza -->
+      <div class="mb-3">
+        <label for="tiempo_fabricacion" class="form-label">Tiempo de Fabricación</label>
+        <input type="number" step="0.1" class="form-control" id="tiempo_fabricacion" name="tiempo_fabricacion" value="{{ detalles.tiempo_fabricacion if detalles else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="tiempo_pintado" class="form-label">Tiempo de Pintado</label>
+        <input type="number" step="0.1" class="form-control" id="tiempo_pintado" name="tiempo_pintado" value="{{ detalles.tiempo_pintado if detalles else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="tiempo_lijado" class="form-label">Tiempo de Lijado</label>
+        <input type="number" step="0.1" class="form-control" id="tiempo_lijado" name="tiempo_lijado" value="{{ detalles.tiempo_lijado if detalles else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="tiempo_masillado" class="form-label">Tiempo de Masillado</label>
+        <input type="number" step="0.1" class="form-control" id="tiempo_masillado" name="tiempo_masillado" value="{{ detalles.tiempo_masillado if detalles else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="costo" class="form-label">Costo</label>
+        <input type="number" step="0.01" class="form-control" id="costo" name="costo" value="{{ detalles.costo if detalles else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="gasto_resina" class="form-label">Gasto de Resina</label>
+        <input type="number" step="0.1" class="form-control" id="gasto_resina" name="gasto_resina" value="{{ detalles.gasto_resina if detalles else '' }}">
+      </div>
+
       <button type="submit" class="btn btn-primary">Actualizar Pieza</button>
     </form>
   </div>

@@ -130,6 +130,81 @@ def crear_pieza(
 
     return RedirectResponse(url="/piezas", status_code=303)
 
+# Ruta para editar una pieza
+@router.get("/piezas/{pieza_id}/editar", response_class=HTMLResponse)
+async def editar_pieza(pieza_id: int, request: Request, db: Session = Depends(get_db)):
+    pieza = db.query(PiezaBasica).filter(PiezaBasica.id == pieza_id).first()
+    if pieza is None:
+        raise HTTPException(status_code=404, detail="Pieza no encontrada")
+
+    # Buscar los detalles de la pieza
+    detalles = db.query(PiezaDetalles).filter(PiezaDetalles.pieza_id == pieza_id).first()
+
+    return templates.TemplateResponse(
+        "editar_pieza.html",
+        {
+            "request": request,
+            "pieza": pieza,
+            "detalles": detalles  # Pasa los detalles de la pieza
+        }
+    )
+# Ruta para ver los detalles de una pieza
+@router.get("/piezas/{pieza_id}", response_class=HTMLResponse)
+async def obtener_pieza(pieza_id: int, request: Request, db: Session = Depends(get_db)):
+    pieza = db.query(PiezaBasica).filter(PiezaBasica.id == pieza_id).first()
+    if pieza is None:
+        raise HTTPException(status_code=404, detail="Pieza no encontrada")
+
+    # Buscar los detalles de la pieza
+    detalles = db.query(PiezaDetalles).filter(PiezaDetalles.pieza_id == pieza_id).first()
+
+    return templates.TemplateResponse(
+        "detalle_pieza.html",  # Puedes tener una plantilla para mostrar los detalles de la pieza
+        {"request": request, "pieza": pieza, "detalles": detalles}
+    )
+
+# Ruta POST para actualizar una pieza existente
+@router.post("/piezas/{pieza_id}/editar", response_class=RedirectResponse)
+async def actualizar_pieza(pieza_id: int, nombre: str = Form(...), marca: str = Form(...),
+                           referencia: str = Form(...), tiempo_fabricacion: Optional[float] = Form(None),
+                           tiempo_pintado: Optional[float] = Form(None), tiempo_lijado: Optional[float] = Form(None),
+                           tiempo_masillado: Optional[float] = Form(None), costo: Optional[float] = Form(None),
+                           gasto_resina: Optional[float] = Form(None), db: Session = Depends(get_db)):
+    pieza = db.query(PiezaBasica).filter(PiezaBasica.id == pieza_id).first()
+    if pieza is None:
+        raise HTTPException(status_code=404, detail="Pieza no encontrada")
+
+    # Actualizar los campos básicos
+    pieza.nombre = nombre
+    pieza.marca = marca
+    pieza.referencia = referencia
+
+    # Si los detalles existen, actualizarlos
+    detalles = db.query(PiezaDetalles).filter(PiezaDetalles.pieza_id == pieza_id).first()
+    if detalles:
+        detalles.tiempo_fabricacion = tiempo_fabricacion if tiempo_fabricacion else detalles.tiempo_fabricacion
+        detalles.tiempo_pintado = tiempo_pintado if tiempo_pintado else detalles.tiempo_pintado
+        detalles.tiempo_lijado = tiempo_lijado if tiempo_lijado else detalles.tiempo_lijado
+        detalles.tiempo_masillado = tiempo_masillado if tiempo_masillado else detalles.tiempo_masillado
+        detalles.costo = costo if costo else detalles.costo
+        detalles.gasto_resina = gasto_resina if gasto_resina else detalles.gasto_resina
+    else:
+        # Si no existen detalles, crea un nuevo objeto
+        detalles = PiezaDetalles(
+            pieza_id=pieza_id,
+            tiempo_fabricacion=tiempo_fabricacion,
+            tiempo_pintado=tiempo_pintado,
+            tiempo_lijado=tiempo_lijado,
+            tiempo_masillado=tiempo_masillado,
+            costo=costo,
+            gasto_resina=gasto_resina
+        )
+        db.add(detalles)
+
+    db.commit()
+    db.refresh(pieza)
+
+    return RedirectResponse(url=f"/piezas/{pieza_id}", status_code=303)
 
 # Ruta para crear detalles de una pieza
 @router.post("/piezas_detalles")
@@ -178,6 +253,24 @@ def agregar_varias_piezas(
     # Retornar respuesta exitosa
     return {"message": "Piezas agregadas exitosamente", "piezas": piezas}
 
+@router.get("/piezas/compare/{pieza_id_1}/{pieza_id_2}", response_class=HTMLResponse)
+async def comparar_piezas(pieza_id_1: int, pieza_id_2: int, request: Request, db: Session = Depends(get_db)):
+    pieza_1 = db.query(PiezaBasica).filter(PiezaBasica.id == pieza_id_1).first()
+    pieza_2 = db.query(PiezaBasica).filter(PiezaBasica.id == pieza_id_2).first()
+
+    if not pieza_1 or not pieza_2:
+        raise HTTPException(status_code=404, detail="Una o ambas piezas no fueron encontradas")
+
+    detalles_1 = db.query(PiezaDetalles).filter(PiezaDetalles.pieza_id == pieza_id_1).first()
+    detalles_2 = db.query(PiezaDetalles).filter(PiezaDetalles.pieza_id == pieza_id_2).first()
+
+    if not detalles_1 or not detalles_2:
+        raise HTTPException(status_code=404, detail="Detalles de una o ambas piezas no fueron encontrados")
+
+    return templates.TemplateResponse(
+        "comparar_piezas.html",  # Nueva plantilla para comparar piezas
+        {"request": request, "pieza_1": pieza_1, "pieza_2": pieza_2, "detalles_1": detalles_1, "detalles_2": detalles_2}
+    )
 
 # Ruta para editar una pieza
 @router.get("/piezas/{pieza_id}/editar", response_class=HTMLResponse)
